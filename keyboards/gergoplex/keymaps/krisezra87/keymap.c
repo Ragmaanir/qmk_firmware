@@ -18,6 +18,7 @@ enum combos {
   AS,HJ,JK,KL,LSCLN,
   FV,GB,
   DQ,
+  FT,FF,FS,FN,FE,
   VV,LR
 };
 
@@ -52,6 +53,12 @@ const uint16_t PROGMEM gb_combo[] = {KC_G, KC_B, COMBO_END};
 
 const uint16_t PROGMEM dq_combo[] = {KC_DLR, KC_QUOT, COMBO_END};
 
+const uint16_t PROGMEM ft_combo[] = {KC_F1, KC_F3, COMBO_END};
+const uint16_t PROGMEM ff_combo[] = {KC_F3, KC_F5, COMBO_END};
+const uint16_t PROGMEM fs_combo[] = {KC_F5, KC_F7, COMBO_END};
+const uint16_t PROGMEM fn_combo[] = {KC_F8, KC_F10, COMBO_END};
+const uint16_t PROGMEM fe_combo[] = {KC_F10, KC_F12, COMBO_END};
+
 const uint16_t PROGMEM vv_combo[] = {KC_VOLU, KC_VOLD, COMBO_END};
 const uint16_t PROGMEM lr_combo[] = {KC_BTN1, KC_BTN2, COMBO_END};
 
@@ -73,14 +80,100 @@ combo_t key_combos[COMBO_COUNT] = {
 
   // Symbols
   [DQ] = COMBO(dq_combo, KC_PIPE),
+  [FT] = COMBO(ft_combo, KC_F2),
+  [FF] = COMBO(ff_combo, KC_F4),
+  [FS] = COMBO(fs_combo, KC_F6),
+  [FN] = COMBO(fn_combo, KC_F9),
+  [FE] = COMBO(fe_combo, KC_F11),
 
   // Pad
   [VV] = COMBO(vv_combo, KC_MUTE),
   [LR] = COMBO(lr_combo, KC_BTN3),
 };
 
+enum custom_keycodes {
+    ALT_ONE=SAFE_RANGE,
+    ALT_TWO,
+    ALT_THREE,
+    ALT_FOUR,
+    ALT_FIVE,
+    ALT_SIX,
+    ALT_SEVEN,
+    ALT_EIGHT,
+    ALT_NINE,
+    ALT_ZERO
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case ALT_ONE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("1"));
+            }
+            break;
+
+        case ALT_TWO:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("2"));
+            }
+            break;
+
+        case ALT_THREE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("3"));
+            }
+            break;
+
+        case ALT_FOUR:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("4"));
+            }
+            break;
+
+        case ALT_FIVE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("5"));
+            }
+            break;
+
+        case ALT_SIX:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("6"));
+            }
+            break;
+
+        case ALT_SEVEN:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("7"));
+            }
+            break;
+
+        case ALT_EIGHT:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("8"));
+            }
+            break;
+
+        case ALT_NINE:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("9"));
+            }
+            break;
+
+        case ALT_ZERO:
+            if (record->event.pressed) {
+                SEND_STRING(SS_LALT("0"));
+            }
+            break;
+    }
+    return true;
+};
+
 // Blank template at the bottom
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+
+[0] = {{ALT_ONE, ALT_TWO}},
+
 /* Keymap 0: Basic layer
  *
  * ,------------------------------.      ,--------------------------------.
@@ -91,7 +184,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |SHFT/Z|  X  |  C  |  V  |  B  |      |  N  |  M  |  <  |  >  | SHFT/? |
  * `------+-----+-----+-----+-----'      `--------------------------------'
  *       .------------------------.      .------------------.
- *       | LALT |DEL/ALT|BSPC(SYM)|      | SPC(NUM)|ENT|RCTL|
+ *       | LALT|DEL/LCTL|BSPC(SYM)|      | SPC(NUM)|ENT|RCTL|
  *       '------------------------'      '------------------'
  */
 [BASE] = LAYOUT_gergoplex(
@@ -99,28 +192,28 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_A, KC_S, KC_D, KC_F, KC_G,                 KC_H, KC_J, KC_K,    KC_L,   KC_SCLN,
     MT(MOD_RSFT, KC_Z),KC_X, KC_C, KC_V, KC_B,    KC_N, KC_M, KC_COMM, KC_DOT, MT(MOD_RSFT, KC_SLSH),
 
-   	KC_LALT, KC_DEL,  LT(SYMB,KC_BSPC), // Left
+   	KC_LALT, MT(MOD_LCTL,KC_DEL),  LT(SYMB,KC_BSPC), // Left
   	LT(NUMB, KC_SPC), KC_ENT, KC_RCTL  // Right
     ),
 
 /* Keymap 1: Symbols/Function Layer
- * ,-----------------------------.       ,--------------------------------.
- * |  !   |  @  |  #  |  $  |  %  |      |  ^  |  &  |  *  |  (  |    )   |
- * |------+-----+-----+-----+-----|      |--------------------------------|
- * |  `   |  0  |  (  |  {  |  [  |      |  ]  |  }  |  )  |  $ PIPE  '   |
- * |------+-----+-----+-----+-----|      |--------------------------------|
- * | SHIFT| F1  |  F2 | F3  | F4  |      |  F5 | F6  | F7  | F8  | SHIFT  |
- * `------+-----+-----+------+----'      `--------------------------------'
- *  .-----------------.                   .------------------.
- *  | F9 | F10 |      |                   |  ~  | F11 | F12  |
- *  '-----------------'                   '------------------'
+ * ,-----------------------------.       ,----------------------------------.
+ * | ALT1 | ALT2| ALT3| ALT4| ALT5|      | ALT6| ALT7 | ALT8 | ALT9| ALT0   |
+ * |------+-----+-----+-----+-----|      |----------------------------------|
+ * |  `   |  0  |  (  |  {  |  [  |      |  ]  |  }   |  )   |  $ PIPE  '   |
+ * |------+-----+-----+-----+-----|      |----------------------------------|
+ * | SHIFT| F1 F2 F3 F4 F5 F6 F7  |      | F8 F9 F10 F11 F12 |     | SHIFT  |
+ * `------+-----+-----+-----+-----'      `----------------------------------'
+ *              .-----------------.      .-------------------.
+ *              |     |     |     |      |  ~  |      |      |
+ *              '-----------------'      '-------------------'
  */
 
 [SYMB] = LAYOUT_gergoplex(
-    KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,   KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN,
-    KC_GRV,  KC_0,    KC_LPRN, KC_LCBR, KC_LBRC,   KC_RBRC, KC_RCBR, KC_RPRN, KC_DLR,  KC_QUOT,
-    KC_LSFT, KC_F1,   KC_F2,   KC_F3,   KC_F4,     KC_F5,     KC_F6,   KC_F7,   KC_F8, KC_RSFT,
-                      KC_F9,   KC_F10,  KC_TRNS,   KC_TILD,  KC_F11,  KC_F12
+    ALT_ONE, ALT_TWO, ALT_THREE, ALT_FOUR, ALT_FIVE,   ALT_SIX, ALT_SEVEN, ALT_EIGHT, ALT_NINE, ALT_ZERO,
+    KC_GRV,  KC_0,    KC_LPRN,   KC_LCBR,  KC_LBRC,    KC_RBRC, KC_RCBR,   KC_RPRN,   KC_DLR,   KC_QUOT,
+    KC_LSFT, KC_F1,   KC_F3,     KC_F5,    KC_F7,      KC_F8,   KC_F10,    KC_F12,    KC_TRNS,  KC_RSFT,
+                      KC_TRNS,   KC_TRNS,  KC_TRNS,    KC_TILD, KC_TRNS,   KC_TRNS
     ),
 
 /* Keymap 2: Pad layer
@@ -131,9 +224,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+-----+-----+MUTE-+-MMB-|      |-------------------------------|
  * | SHIFT|     | PLY |VOLDN| RMB |      |MLFT | MDWN| MUP | MRGT| SHIFT |
  * `------+-----+-----+-----+-----'      `-------------------------------'
- *  .-----------------.                   .-----------------.
- *  |     |    |  =   |                   |     |     |     |
- *  '-----------------'                   '-----------------'
+ *              .-----------------.      .-----------------.
+ *              |     |    |  =   |      |     |     |     |
+ *              '-----------------'      '-----------------'
  */
 [NUMB] = LAYOUT_gergoplex(
     KC_1,    KC_2,    KC_3,    KC_4,    KC_5, 	   KC_6,  	KC_7, 	 KC_8,    KC_9,    KC_0,
