@@ -11,6 +11,9 @@ MCU = atmega32u4
 #   ATmega328P   USBasp
 BOOTLOADER = atmel-dfu
 
+UNICODE_ENABLE 		= yes
+# UNICODEMAP_ENABLE = yes
+MOUSEKEY_ENABLE   = yes
 CUSTOM_MATRIX   	= yes
 COMBO_ENABLE  		= yes
 EXTRAKEY_ENABLE  	= yes
