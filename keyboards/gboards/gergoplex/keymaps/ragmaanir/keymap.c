@@ -1,97 +1,13 @@
-/* Good on you for modifying your layout! if you don't have
- * time to read the QMK docs, a list of keycodes can be found at
- *
- * https://github.com/qmk/qmk_firmware/blob/master/docs/keycodes.md
- *
- * There's also a template for adding new layers at the bottom of this file!
- */
 
 #include QMK_KEYBOARD_H
 
-#define _X_ KC_NO
-#define _T_ KC_TRNS
+// #define _X_ KC_NO
+// #define _T_ KC_TRNS
+#define KC___ KC_NO
+#define KC__T_ KC_TRNS
 
 #define KC_LSQBR  KC_LBRACKET
 #define KC_RSQBR  KC_RBRACKET
-
-// Combos
-// enum combos {
-//   QW,IO,OP,
-//   AS,HJ,JK,KL,LSCLN,
-//   FV,GB,
-//   DQ,
-//   FT,FF,FS,FN,FE,
-//   VV,LR
-// };
-
-// NOTE: If you're using MT,LT or anything you must
-// define it here. Note this if you change your layout!
-
-/* Keymap 0: Basic layer
- *
- * ,-----------------------------.       ,--------------------------------.
- * |    TAB    |     |     |      |      |     |     |    MINS  BSLH      |
- * |-----+-----+-----+-----+------|      |--------------------------------|
- * |    ESC    |     |     |      |      |    LES   ESC   GRT    |        |
- * |-----+-----+-----+-RMB-+-LMB--|      |--------------------------------|
- * |     |     |     |     |      |      |     |     |     |     |        |
- * `-----+-----+-----+-----+------'      `--------------------------------'
- *  .-------------------------.           .-----------------.
- *  |        |       |        |           |     |     |     |
- *  '-------------------------'           '-----------------'
- */
-// const uint16_t PROGMEM qw_combo[] = {KC_Q, KC_W, COMBO_END};
-// const uint16_t PROGMEM io_combo[] = {KC_I, KC_O, COMBO_END};
-// const uint16_t PROGMEM op_combo[] = {KC_O, KC_P, COMBO_END};
-
-// const uint16_t PROGMEM as_combo[] = {KC_A, KC_S, COMBO_END};
-// const uint16_t PROGMEM hj_combo[] = {KC_H, KC_J, COMBO_END};
-// const uint16_t PROGMEM jk_combo[] = {KC_J, KC_K, COMBO_END};
-// const uint16_t PROGMEM kl_combo[] = {KC_K, KC_L, COMBO_END};
-// const uint16_t PROGMEM lscln_combo[] = {KC_L, KC_SCLN, COMBO_END};
-
-// const uint16_t PROGMEM fv_combo[] = {KC_F, KC_V, COMBO_END};
-// const uint16_t PROGMEM gb_combo[] = {KC_G, KC_B, COMBO_END};
-
-// const uint16_t PROGMEM dq_combo[] = {KC_DLR, KC_QUOT, COMBO_END};
-
-// const uint16_t PROGMEM ft_combo[] = {KC_F1, KC_F3, COMBO_END};
-// const uint16_t PROGMEM ff_combo[] = {KC_F3, KC_F5, COMBO_END};
-// const uint16_t PROGMEM fs_combo[] = {KC_F5, KC_F7, COMBO_END};
-// const uint16_t PROGMEM fn_combo[] = {KC_F8, KC_F10, COMBO_END};
-// const uint16_t PROGMEM fe_combo[] = {KC_F10, KC_F12, COMBO_END};
-
-// const uint16_t PROGMEM vv_combo[] = {KC_VOLU, KC_VOLD, COMBO_END};
-// const uint16_t PROGMEM lr_combo[] = {KC_BTN1, KC_BTN2, COMBO_END};
-
-// combo_t key_combos[COMBO_COUNT] = {
-//   // Horizontal Chords
-//   [QW] = COMBO(qw_combo, KC_TAB),
-//   [IO] = COMBO(io_combo, KC_MINS),
-//   [OP] = COMBO(op_combo, KC_BSLS),
-
-//   [AS] = COMBO(as_combo, KC_ESC),
-//   [HJ] = COMBO(hj_combo, KC_LT),
-//   [JK] = COMBO(jk_combo, KC_ESC),
-//   [KL] = COMBO(kl_combo, KC_GT),
-//   [LSCLN] = COMBO(lscln_combo, KC_QUOT),
-
-//   // Vertical
-//   [GB] = COMBO(gb_combo, KC_BTN1),
-//   [FV] = COMBO(fv_combo, KC_BTN2),
-
-//   // Symbols
-//   [DQ] = COMBO(dq_combo, KC_PIPE),
-//   [FT] = COMBO(ft_combo, KC_F2),
-//   [FF] = COMBO(ff_combo, KC_F4),
-//   [FS] = COMBO(fs_combo, KC_F6),
-//   [FN] = COMBO(fn_combo, KC_F9),
-//   [FE] = COMBO(fe_combo, KC_F11),
-
-//   // Pad
-//   [VV] = COMBO(vv_combo, KC_MUTE),
-//   [LR] = COMBO(lr_combo, KC_BTN3),
-// };
 
 // https://www.reddit.com/r/olkb/comments/72wuxs/qmk_best_way_to_setup_a_key_to_switch_to_layer_a/
 
@@ -107,10 +23,14 @@ enum Layer {
 };
 
 enum CustomKeycodes {
-    CX_A = SAFE_RANGE,
-    CX_S,
-    CX_F,
-    CX_G
+    KC_xA = SAFE_RANGE,
+    KC_xS,
+    KC_xF,
+    KC_xG,
+    KC_MO_1,
+    KC_MO_2,
+    KC_MO_3,
+    KC_MO_4
 };
 
 static uint16_t tap_timers[4];
@@ -127,7 +47,7 @@ bool hold_or_fallthrough(bool pressed, uint16_t kc, uint8_t held_layer, uint16_t
     layer_on(held_layer);
     register_mods(mod_bits);
     key_pressed_in_taphold_layer = false;
-    return FALLTHROUGH; // dont fallback to default behavior
+    return FALLTHROUGH;
   } else {
     unregister_mods(mod_bits);
     layer_off(held_layer);
@@ -142,16 +62,34 @@ bool hold_or_fallthrough(bool pressed, uint16_t kc, uint8_t held_layer, uint16_t
   }
 }
 
+void layer_momentarily(uint8_t layer, bool state) {
+  state ? layer_on(layer) : layer_off(layer);
+}
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  bool pressed = record->event.pressed;
+
   switch(keycode) {
-    case CX_A:
-      return hold_or_fallthrough(record->event.pressed, KC_A, LAYER_A, MOD_BIT(KC_LCTRL), &tap_timers[0]);
-    case CX_S:
-      return hold_or_fallthrough(record->event.pressed, KC_S, LAYER_S, 0, &tap_timers[0]);
-    case CX_F:
-      return hold_or_fallthrough(record->event.pressed, KC_F, LAYER_F, 0, &tap_timers[0]);
-    case CX_G:
-      return hold_or_fallthrough(record->event.pressed, KC_G, LAYER_G, 0, &tap_timers[0]);
+    case KC_xA:
+      return hold_or_fallthrough(pressed, KC_A, LAYER_A, MOD_BIT(KC_LCTRL), &tap_timers[0]);
+    case KC_xS:
+      return hold_or_fallthrough(pressed, KC_S, LAYER_S, 0, &tap_timers[0]);
+    case KC_xF:
+      return hold_or_fallthrough(pressed, KC_F, LAYER_F, 0, &tap_timers[0]);
+    case KC_xG:
+      return hold_or_fallthrough(pressed, KC_G, LAYER_G, 0, &tap_timers[0]);
+    case KC_MO_1:
+      layer_momentarily(1, pressed);
+      return NO_FALLTHROUGH;
+    case KC_MO_2:
+      layer_momentarily(2, pressed);
+      return NO_FALLTHROUGH;
+    case KC_MO_3:
+      layer_momentarily(3, pressed);
+      return NO_FALLTHROUGH;
+    case KC_MO_4:
+      layer_momentarily(4, pressed);
+      return NO_FALLTHROUGH;
     default:
       key_pressed_in_taphold_layer = true;
       return FALLTHROUGH; // use default
@@ -159,102 +97,78 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [LAYER_0] = LAYOUT_gergoplex(
-    KC_B,  KC_W, KC_E, KC_R, KC_T,    KC_Z, KC_U, KC_I, KC_O, KC_P,
-    CX_A, CX_S, KC_D, CX_F, CX_G,    KC_H, KC_J, KC_K, KC_L, KC_Y,
-    _X_,  KC_X, KC_C, KC_V, KC_B,    KC_N, KC_M, KC_Q, KC_P, KC_N,
+  [LAYER_0] = LAYOUT_kc(
+    B,  W,  E, R,  T,      Z, U, I, O, P,
+    xA, xS, D, xF, xG,     H, J, K, L, Y,
+    __, X,  C, V,  B,      N, M, Q, P, N,
 
-   	_X_, MO(1), MO(3),            KC_LSFT, MO(2), MO(4)
+   	__, MO_1, MO_3,           LSFT, MO_2, MO_4
   ),
 
-  [LAYER_1] = LAYOUT_gergoplex(
-    KC_PAUSE, _X_, KC_SPACE, KC_TAB, KC_ESC,         _X_,     KC_BSPC, KC_UP,   KC_DEL,   _X_,
-    _X_,      KC_TAB, _X_,   KC_ENT, KC_LWIN,       KC_HOME, KC_LEFT, KC_DOWN, KC_RIGHT, KC_END,
-    _X_,      KC_TAB, _X_,   _X_,    _X_,            _X_,     KC_BSPC, _X_,     _X_,      _X_,
+  [LAYER_1] = LAYOUT_kc(
+    PAUSE, __, SPACE, TAB, ESC,        __,   BSPC, UP,   DEL,   __,
+    __,   TAB, __,    ENT, LWIN,       HOME, LEFT, DOWN, RIGHT, END,
+    __,   TAB, __,    __,  __,         __,   BSPC, __,   __,    __,
 
-    _X_, _T_, _X_,                                  KC_LSFT, _X_,   _X_
+    __, _T_, __,                       LSFT, __,   __
   ),
 
-  // [LAYER_1_TAP] = LAYOUT_gergoplex(
-  //   _X_, _X_, KC_MS_BTN2, _X_,        _X_,        _X_, _X_,        KC_MS_UP,   _X_,         _X_,
-  //   _X_, _X_, _X_,        KC_MS_BTN1, _X_,        _X_, KC_MS_LEFT, KC_MS_DOWN, KC_MS_RIGHT, _X_,
-  //   _X_, _X_, _X_,        _X_,        _X_,        _X_, _X_,        _X_,        _X_,         _X_,
+  [LAYER_2] = LAYOUT_kc(
+    AMPR,  PIPE, UNDS, EQL,  COLN,      DLR,  LSQBR, RSQBR, LT, HASH,
+    EXLM,  COMM, DOT,  MINS, ASTR,      DQT,  LPRN,  RPRN,  GT, PERC,
+    QUES,  SCLN, BSLS, PLUS, SLASH,     QUOT, LCBR,  RCBR,  AT, TILD,
 
-  //   _X_, _T_, KC_LCTRL,                           KC_LSFT, KC_LALT, _T_
-  // ),
-
-  [LAYER_2] = LAYOUT_gergoplex(
-    KC_AMPR,  KC_PIPE, KC_UNDS, KC_EQL,  KC_COLN,      KC_DLR,  KC_LSQBR, KC_RSQBR, KC_LT,  KC_HASH,
-    KC_EXLM,  KC_COMM, KC_DOT,  KC_MINS, KC_ASTR,      KC_DQT,  KC_LPRN,  KC_RPRN,  KC_GT,  KC_PERC,
-    KC_QUES,  KC_SCLN, KC_BSLS, KC_PLUS, KC_SLASH,     KC_QUOT, KC_LCBR,  KC_RCBR,  KC_AT,  KC_TILD,
-
-    _X_, _X_, KC_LCTRL,                                _X_, _T_, _X_
+    __, __, LCTRL,                    __, _T_, __
   ),
 
-  [LAYER_3] = LAYOUT_gergoplex(
-    KC_COMM,  KC_DOT, KC_0, KC_PLUS, KC_MINS,         _X_,    KC_BSPC, KC_9, KC_DEL, _X_,
-    KC_1,     KC_2,   KC_3, KC_4,    KC_SPACE,        KC_ENT, KC_5,    KC_6, KC_7,   KC_8,
-    _X_,      _X_,    _X_,  KC_BSLS, KC_ASTR,         _X_,    _X_,     _X_,  _X_,    _X_,
+  [LAYER_3] = LAYOUT_kc(
+    COMM, DOT, 0, PLUS, MINS,         __,  BSPC,  9, DEL, __,
+    1,    2,   3,   4,  SPACE,        ENT, 5,     6, 7,   8,
+    __,   __, __, BSLS, ASTR,         __,  __,   __, __,  __,
 
-    _T_, _X_, _X_,                                       KC_LSFT, KC_LCTRL, KC_LALT
+    _T_, __, __,                      LSFT, LCTRL, LALT
   ),
 
   /* Copy-paste, select all, save, undo, redo, ... */
-  [LAYER_A] = LAYOUT_gergoplex(
-    _X_, _X_, _X_, _X_,  _X_,        KC_A, KC_N, KC_S, KC_O, _X_,
-    _T_, _X_, _X_, KC_C, KC_V,       KC_P,  _X_, KC_X, KC_Z, KC_Y,
-    _X_, _X_, _X_, _X_,  _X_,        _X_,  KC_F,  _X_,  _X_, _X_,
+  [LAYER_A] = LAYOUT_kc(
+    __,  __, __, __, __,     A,  N,  S,  O,  __,
+    _T_, __, __, C,  V,      P,  __, X,  Z,  Y,
+    __,  __, __, __, __,     __, F,  __, __, __,
 
-    _X_, _X_, _X_,                            _X_, _X_, _X_
+    __, __, __,              __, __, __
   ),
 
-  [LAYER_S] = LAYOUT_gergoplex(
-    _X_, _X_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
-    _X_, _T_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
-    _X_, _X_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
+  [LAYER_S] = LAYOUT_kc(
+    __, __,  __, __, __,        __, __, __, __, __,
+    __, _T_, __, __, __,        __, __, __, __, __,
+    __, __,  __, __, __,        __, __, __, __, __,
 
-    _X_, _X_, _X_,                            _X_, _X_, _X_
+    __, __, __,                            __, __, __
   ),
 
-  [LAYER_F] = LAYOUT_gergoplex(
-    _X_, _X_, _X_, _X_, _X_,       KC_MS_WH_UP, KC_MS_BTN3,   KC_MS_UP,          _X_, _X_,
-    _X_, _X_, _X_, _T_, _X_,     KC_MS_WH_DOWN, KC_MS_LEFT, KC_MS_DOWN,  KC_MS_RIGHT, _X_,
-    _X_, _X_, _X_, _X_, _X_,               _X_,        _X_,        _X_,          _X_, _X_,
+  [LAYER_F] = LAYOUT_kc(
+    __, __, __, __,  __,     MS_WH_UP,   MS_BTN3, MS_UP,   __,       __,
+    __, __, __, _T_, __,     MS_WH_DOWN, MS_LEFT, MS_DOWN, MS_RIGHT, __,
+    __, __, __, __,  __,     __,         __,      __,      __,       __,
 
-    _X_, _X_, _X_,                  KC_MS_BTN2, KC_MS_BTN1, _X_
+    __, __, __,              MS_BTN2,    MS_BTN1, __
   ),
 
-  [LAYER_G] = LAYOUT_gergoplex(
-    _X_, _X_, _X_, _X_, _X_,        KC_F1,  KC_F2,  KC_F3,  KC_F4,  KC_F5,
-    _X_, _X_, _X_, _X_, _T_,        KC_F6,  KC_F7,  KC_F8,  KC_F9,  KC_F10,
-    _X_, _X_, _X_, _X_, _X_,        KC_F11, KC_F12, _X_, _X_, _X_,
+  [LAYER_G] = LAYOUT_kc(
+    __, __, __, __, __,        F1,  F2,  F3,  F4,  F5,
+    __, __, __, __, _T_,       F6,  F7,  F8,  F9,  F10,
+    __, __, __, __, __,        F11, F12, __, __, __,
 
-    _X_, _X_, _X_,                            _X_, _X_, _X_
+    __, __, __,                __,  __,  __
   )
 
-  // [LAYER_3_TAP] = LAYOUT_gergoplex(
-  //   KC_F1, KC_F2,    KC_F3, KC_F4,   KC_F5,       KC_F6,  KC_F7,  KC_F8, KC_F9, KC_F10,
-  //   _X_,   KC_TILDE, _X_,   KC_LWIN, KC_F11,      KC_F12, KC_TAB, KC_GRAVE, _X_, _X_,
-  //   _X_,   _X_,      _X_,   _X_,     _X_,         _X_,    _X_,    _X_, _X_, _X_,
-
-  //   _T_, _X_, KC_LCTRL,                           KC_LSFT, KC_LALT, _T_
-  // ),
-
-  // [LAYER_4] = LAYOUT_gergoplex(
-  //   _X_, _X_,         KC_UP,      _X_,          _X_,        _X_, _X_, _X_, _X_, _X_,
-  //   _X_, KC_MS_LEFT,  KC_MS_DOWN, KC_MS_RIGHT,  _X_,        _X_, _X_, _X_, _X_, _X_,
-  //   _X_, _X_,         _X_,        _X_,          _X_,        _X_, _X_, _X_, _X_, _X_,
-
-  //   _X_, _X_, _X_,                                          _X_, _X_, _T_
-  // ),
-
   /*
-  [LAYER_4] = LAYOUT_gergoplex(
-    _X_, _X_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
-    _X_, _X_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
-    _X_, _X_, _X_, _X_, _X_,        _X_, _X_, _X_, _X_, _X_,
+  [XXX] = LAYOUT_kc(
+    __, __, __, __, __,        __, __, __, __, __,
+    __, __, __, __, __,        __, __, __, __, __,
+    __, __, __, __, __,        __, __, __, __, __,
 
-    _X_, _X_, _X_,                            _X_, _X_, _T_
+    __, __, __,                            __, __, _T_
   ),
   */
 };
